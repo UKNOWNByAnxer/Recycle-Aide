@@ -1,7 +1,9 @@
 let chart;
+
 document.getElementById('inputForm').addEventListener('reset', function(event) {
     window.location.reload();
 });
+
 document.getElementById('inputForm').addEventListener('submit', function(event) {
     event.preventDefault();
     const basuraRecolectada = parseFloat(document.getElementById('basuraRecolectada').value);
@@ -9,13 +11,24 @@ document.getElementById('inputForm').addEventListener('submit', function(event) 
         alert('Por favor, introduce un valor numérico válido para la basura recolectada.');
         return;
     }
+
     let recolectionData = JSON.parse(localStorage.getItem('recolectionData')) || [];
     const totalBasuraRecolectada = recolectionData.reduce((total, data) => total + data.basuraRecolectada, 0);
-    if (totalBasuraRecolectada + basuraRecolectada > 100) {
-        alert(`Ya hemos cubierto un ${totalBasuraRecolectada}% del 100% ingresa una cantidad <=${100-totalBasuraRecolectada}%`);
+    const basuraRestante = 100 - totalBasuraRecolectada;
+
+    if (basuraRecolectada > basuraRestante) {
+        alert(`Ya hemos cubierto un ${totalBasuraRecolectada}% del 100%. Ingresa una cantidad <= ${basuraRestante}%.`);
         return;
     }
-    const newData = { day: recolectionData.length + 1, basuraRecolectada, areaRecuperada: totalBasuraRecolectada + basuraRecolectada };
+
+    const newData = {
+        day: recolectionData.length + 1,
+        basuraRecolectada,
+        areaRecuperada: basuraRecolectada,
+        basuraNoRecolectada: 100 - (totalBasuraRecolectada + basuraRecolectada),
+        areaNoRecuperada: 100 - (totalBasuraRecolectada + basuraRecolectada)
+    };
+
     recolectionData.push(newData);
     localStorage.setItem('recolectionData', JSON.stringify(recolectionData));
     localStorage.setItem('chartType', document.getElementById('chartType').value);
@@ -54,12 +67,8 @@ function generateChart(chartType, recolectionData) {
     const labels = recolectionData.map(data => `Día ${data.day}`);
     const basuraRecolectadaData = recolectionData.map(data => data.basuraRecolectada);
     const areaRecuperadaData = recolectionData.map(data => data.areaRecuperada);
-
-    // Calcular el total de basura recolectada y área recuperada
-    const totalBasuraRecolectada = basuraRecolectadaData.reduce((total, value) => total + value, 0);
-    const totalAreaRecuperada = areaRecuperadaData[areaRecuperadaData.length - 1] || 0;
-    const basuraNoRecolectada = 100 - totalBasuraRecolectada;
-    const areaNoRecuperada = 100 - totalAreaRecuperada;
+    const basuraNoRecolectadaData = recolectionData.map(data => data.basuraNoRecolectada);
+    const areaNoRecuperadaData = recolectionData.map(data => data.areaNoRecuperada);
 
     // Destruir el gráfico anterior si existe
     if (chart) {
@@ -84,12 +93,12 @@ function generateChart(chartType, recolectionData) {
                 },
                 {
                     label: 'Basura No Recolectada (%)',
-                    data: new Array(basuraRecolectadaData.length).fill(basuraNoRecolectada),
+                    data: basuraNoRecolectadaData,
                     backgroundColor: '#f00'
                 },
                 {
                     label: 'Área No Recuperada (%)',
-                    data: new Array(areaRecuperadaData.length).fill(areaNoRecuperada),
+                    data: areaNoRecuperadaData,
                     backgroundColor: '#f80'
                 }
             ]
