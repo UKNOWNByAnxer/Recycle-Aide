@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyecto de Reciclaje</title>
+    <meta name="title" content="Proyecto de Reciclaje" />
+    <meta name="description" content="Iniciativa de reciclaje que muestra datos sobre la recolección de basura y la recuperación de áreas. Contribuye a un medio ambiente más limpio y sostenible." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.tusitiodeproyecto.com" />
+    <meta property="og:title" content="Proyecto de Reciclaje" />
+    <meta property="og:description" content="Iniciativa de reciclaje que muestra datos sobre la recolección de basura y la recuperación de áreas. Contribuye a un medio ambiente más limpio y sostenible." />
+    <meta property="og:image" content="https://www.tusitiodeproyecto.com/images/proyecto-reciclaje.png" />
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://www.tusitiodeproyecto.com" />
+    <meta property="twitter:title" content="Proyecto de Reciclaje" />
+    <meta property="twitter:description" content="Iniciativa de reciclaje que muestra datos sobre la recolección de basura y la recuperación de áreas. Contribuye a un medio ambiente más limpio y sostenible." />
+    <meta property="twitter:image" content="https://www.tusitiodeproyecto.com/images/proyecto-reciclaje.png" />
+    <link rel="stylesheet" href="styles.css">
+    <script src="dependencia.js"></script>
+</head>    
+<body>
+    <form id="inputForm">
+        <label for="basuraRecolectada">Cantidad de Basura Recolectada (%):</label>
+        <input type="text" id="basuraRecolectada" name="basuraRecolectada" required>
+        <br>
+        <label for="chartType">Selecciona el tipo de gráfica:</label>
+        <select id="chartType" name="chartType">
+            <option value="polarArea">Polar Area</option>
+            <option value="doughnut">Circular</option>
+            <option value="bar">Barras</option>
+        </select>
+        <br>
+        <button type="submit">Guardar Datos</button>
+        <button type="reset">Reiniciar</button>
+        <button type="button" id="clearButton">Eliminar Datos</button>
+    </form>
+    <div id="chartContainer" style="width: 80%; margin: 0 auto;">
+        <canvas id="chartCanvas"></canvas>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

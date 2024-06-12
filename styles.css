@@ -1,0 +1,93 @@
+body {
+    font-family: 'Roboto', sans-serif; 
+    margin: 0; 
+    padding: 0; 
+    background-color: #000; 
+    color: #fff; 
+}
+
+h1 {
+    text-align: center; 
+    margin-top: 50px; 
+}
+
+form {
+    margin-bottom: 20px;
+    text-align: center; 
+}
+
+label {
+    margin-right: 10px;
+}
+
+input[type="text"],
+input[type="number"] {
+    padding: 8px 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+    border-radius: 5px;
+    border: none;
+    background-color: #333; 
+    color: #fff; 
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus {
+    outline: none;
+    box-shadow: 0 0 15px rgb(255, 255, 255); 
+}
+
+button[type="submit"],
+button[type="reset"],
+button[type="button"] {
+    padding: 8px 20px;
+    margin-top: 10px;
+    border: none;
+    text-decoration: none;
+
+    overflow: hidden;
+    border-radius: 5px;
+    background-color: #4c93af; 
+    color: #fff; 
+    cursor: pointer;
+    transition: .5s;
+    animation: btn-anim1 2s linear infinite;
+    transition: background-color 0.3s ease; 
+}
+
+button[type="submit"]:hover,
+button[type="reset"]:hover {
+    background: #03e4f4;
+    color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 5px #03e4f4, 0 0 25px #03e4f4, 0 0 50px #03e4f4, 0 0 100px #03e4f4; 
+}
+
+#chartContainer {
+    width: 80%;
+    height: 50%;
+    position: absolute;
+    left: 10%;
+    border: 1px solid #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5); 
+}
+
+.formula {
+    width: 20%;
+    position: absolute;
+    bottom: 100px;
+    left: 40%;
+
+}
+
+@keyframes btn-anim1 {
+    0% {
+        left: -100%;
+    }
+
+    50%, 100% {
+        left: 100%;
+    }
+}
