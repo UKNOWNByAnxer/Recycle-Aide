@@ -731,6 +731,41 @@ animation: colors var(--sp) linear 0s infinite;
    - **V1:** Contiene más elementos de interfaz de usuario (formulario, botones, inputs).
    - **V2:** Diseño simplificado con un enfoque en la selección del tipo de gráfico y la visualización del gráfico mismo.
 
+### Diferencias en la Presentación y Estructura de Datos:
+
+1. **Gráficos de Líneas y Barras:**
+   - **Estructura de Datos:**
+     - Los gráficos de líneas y barras utilizan conjuntos de datos (`datasets`) que se presentan en un formato de series temporales o categorizadas. 
+     - Cada conjunto de datos representa una serie de valores a lo largo de las etiquetas del eje X (días de la semana en este caso).
+     - Los datos se organizan en varias series que muestran diferentes métricas (porcentaje y área) para cada individuo.
+   - **Visualización:**
+     - Las barras muestran las diferencias individuales entre categorías claramente con la altura de las barras.
+     - Las líneas conectan puntos de datos en una serie temporal, mostrando tendencias y patrones a lo largo del tiempo.
+     - Estos gráficos utilizan escalas en los ejes X e Y para cuantificar valores precisos y comparar las variaciones.
+
+2. **Gráficos de PolarArea, Doughnut y Pie:**
+   - **Estructura de Datos:**
+     - Estos gráficos utilizan un conjunto de datos agrupados para representar proporciones relativas de un todo.
+     - No se enfocan en la tendencia temporal o categorizada por días, sino en la distribución total de los datos.
+     - Los datos aquí son más agregados, enfocándose en los totales por categorías (por ejemplo, porcentaje total y área total por día).
+   - **Visualización:**
+     - El gráfico de pie muestra proporciones como segmentos de un círculo, destacando la composición de un conjunto total.
+     - El gráfico de doughnut es similar pero con un centro vacío, permitiendo una visualización de proporciones con un enfoque ligeramente diferente.
+     - El gráfico polarArea distribuye los datos en forma de segmentos radiales, con las áreas representando valores relativos.
+     - Estos gráficos no utilizan escalas en ejes X e Y de la misma manera; se centran más en la comparación de proporciones relativas en una forma circular.
+
+### Resumen:
+
+- **Líneas y Barras:**
+  - Adecuados para visualizar cambios y comparaciones en datos categorizados y temporales.
+  - Usan escalas en los ejes para mostrar valores exactos y variaciones.
+  - Muestran múltiples series de datos individualmente.
+
+- **PolarArea, Doughnut y Pie:**
+  - Adecuados para mostrar distribuciones y proporciones de un conjunto total.
+  - No utilizan escalas en ejes X e Y; se centran en la representación de partes de un todo.
+  - Muestran una vista agregada de los datos, destacando las proporciones relativas.
+
 ### Conclusión
 
 La versión 2 del programa representa una simplificación y mejora en la visualización de los datos de limpieza. Al eliminar la entrada manual de datos y trabajar con datos predefinidos, se facilita la consistencia en la visualización de los datos a través de diferentes tipos de gráficos. La adición de un gráfico de tipo `pie` y la mejora en la consistencia de la visualización aseguran que los usuarios obtengan una experiencia clara y coherente.
