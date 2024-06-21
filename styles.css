@@ -1,77 +1,35 @@
 body {
-    font-family: 'Roboto', sans-serif; 
-    margin: 0; 
-    padding: 0; 
-    background-color: #000; 
-    color: #fff; 
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #fff;
+    font-size: 1em;
+    /* ! Fondo */
+    --bg: radial-gradient(#333 5%, #0000 6%);
+    --size: 3rem;
+    width: 100%;
+    height: 100%;
+    background-color: #1a1a1a;
+    background-image: radial-gradient(#333 5%, #0000 6%),
+                      radial-gradient(#333 5%, #0000 6%);
+    background-position: 0 0, calc(var(--size) / 2) calc(var(--size) / 2);
+    background-size: var(--size) var(--size);
 }
 
 h1 {
-    text-align: center; 
-    margin-top: 50px; 
-}
-
-form {
-    margin-bottom: 20px;
-    text-align: center; 
-}
-
-label {
-    margin-right: 10px;
-}
-
-input[type="text"],
-input[type="number"] {
-    padding: 8px 10px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    margin-right: 10px;
-    border-radius: 5px;
-    border: none;
-    background-color: #333; 
-    color: #fff; 
-}
-
-input[type="text"]:focus,
-input[type="number"]:focus {
-    outline: none;
-    box-shadow: 0 0 15px rgb(255, 255, 255); 
-}
-
-button[type="submit"],
-button[type="reset"],
-button[type="button"] {
-    padding: 8px 20px;
-    margin-top: 10px;
-    border: none;
-    text-decoration: none;
-
-    overflow: hidden;
-    border-radius: 5px;
-    background-color: #4c93af; 
-    color: #fff; 
-    cursor: pointer;
-    transition: .5s;
-    animation: btn-anim1 2s linear infinite;
-    transition: background-color 0.3s ease; 
-}
-
-button[type="submit"]:hover,
-button[type="reset"]:hover {
-    background: #03e4f4;
-    color: #fff;
-    border-radius: 5px;
-    box-shadow: 0 0 5px #03e4f4, 0 0 25px #03e4f4, 0 0 50px #03e4f4, 0 0 100px #03e4f4; 
+    text-align: center;
+    margin-top: 50px;
 }
 
 #chartContainer {
     width: 80%;
+    background-color: #222;
     height: 50%;
     position: absolute;
     left: 10%;
     border: 1px solid #fff;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5); 
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
 .formula {
@@ -79,7 +37,6 @@ button[type="reset"]:hover {
     position: absolute;
     bottom: 100px;
     left: 40%;
-
 }
 
 @keyframes btn-anim1 {
@@ -91,3 +48,77 @@ button[type="reset"]:hover {
         left: 100%;
     }
 }
+
+@keyframes colors {
+    100% {
+        filter: hue-rotate(360deg);
+    }
+}
+
+/* Estilos y animaciones para select y options */
+select {
+    appearance: none;
+    background-color: #444;
+    color: #fff;
+    border: 1px solid #fff;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 1em;
+    outline: none;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    cursor: pointer;
+    width: 200px;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+}
+
+select:hover {
+    background-color: #555;
+    border-color: #03e4f4;
+}
+
+select:focus {
+    border-color: #0f0;
+}
+
+select:active {
+    background-color: #222;
+    border-color: #0f0;
+    transform: scale(0.95);
+}
+
+option {
+    background-color: #444;
+    color: #fff;
+}
+
+/* Estilos y animaciones para button */
+button {
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #fff;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+    margin: 20px;
+}
+
+button:hover {
+    background-color: #555;
+    border-color: #03e4f4;
+    transform: scale(1.05);
+}
+
+button:active {
+    background-color: #222;
+    border-color: #0f0;
+    transform: scale(0.95);
+}
+
+/* !Animación
+top: 10%;
+--sp: 1s; // speed
+animation: colors var(--sp) linear 0s infinite;
+----------! */
