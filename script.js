@@ -1,127 +1,179 @@
 let chart;
 
-document.getElementById('inputForm').addEventListener('reset', function(event) {
-    window.location.reload();
-});
-
-document.getElementById('inputForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-    const basuraRecolectada = parseFloat(document.getElementById('basuraRecolectada').value);
-    if (isNaN(basuraRecolectada)) {
-        alert('Por favor, introduce un valor numérico válido para la basura recolectada.');
-        return;
+// Datos de limpieza por días
+const limpiezaData = [
+    {
+        day: "Lunes",
+        total: { porcentaje: 6, area: 21.5 },
+        detalles: [
+            { nombre: "Tania", porcentaje: 1.6, area: 5.7 },
+            { nombre: "Laila", porcentaje: 2.1, area: 7.5 },
+            { nombre: "Sam", porcentaje: 1.0, area: 3.6 },
+            { nombre: "Lesly", porcentaje: 1.3, area: 4.7 }
+        ]
+    },
+    {
+        day: "Martes",
+        total: { porcentaje: 9, area: 32.25 },
+        detalles: [
+            { nombre: "Tania", porcentaje: 1.7, area: 6.1 },
+            { nombre: "Laila", porcentaje: 2.8, area: 10 },
+            { nombre: "Sam", porcentaje: 2.5, area: 9 },
+            { nombre: "Lesly", porcentaje: 2.0, area: 7.2 }
+        ]
+    },
+    {
+        day: "Miércoles",
+        total: { porcentaje: 17, area: 60.91 },
+        detalles: [
+            { nombre: "Tania", porcentaje: 3.2, area: 11.5 },
+            { nombre: "Laila", porcentaje: 3.9, area: 14 },
+            { nombre: "Sam", porcentaje: 5.1, area: 18.3 },
+            { nombre: "Lesly", porcentaje: 4.8, area: 17.2 }
+        ]
+    },
+    {
+        day: "Jueves",
+        total: { porcentaje: 14, area: 50.16 },
+        detalles: [
+            { nombre: "Tania", porcentaje: 3.2, area: 11.5 },
+            { nombre: "Laila", porcentaje: 3.7, area: 13.3 },
+            { nombre: "Sam", porcentaje: 2.2, area: 7.9 },
+            { nombre: "Lesly", porcentaje: 4.9, area: 17.5 }
+        ]
+    },
+    { day: "Viernes", total: { porcentaje: 0, area: 0 }, detalles: [] },
+    {
+        day: "Sábado",
+        total: { porcentaje: 54, area: 193.5 },
+        detalles: [
+            { nombre: "Presidencia", porcentaje: 39, area: 139.75 },
+            { nombre: "Tania, Laila, Sam y Lesly", porcentaje: 15, area: 53.75 }
+        ]
     }
+];
 
-    let recolectionData = JSON.parse(localStorage.getItem('recolectionData')) || [];
-    const totalBasuraRecolectada = recolectionData.reduce((total, data) => total + data.basuraRecolectada, 0);
-    const basuraRestante = 100 - totalBasuraRecolectada;
-
-    if (basuraRecolectada > basuraRestante) {
-        alert(`Ya hemos cubierto un ${totalBasuraRecolectada}% del 100%. Ingresa una cantidad <= ${basuraRestante}%.`);
-        return;
-    }
-
-    const newData = {
-        day: recolectionData.length + 1,
-        basuraRecolectada,
-        areaRecuperada: basuraRecolectada,
-        basuraNoRecolectada: 100 - (totalBasuraRecolectada + basuraRecolectada),
-        areaNoRecuperada: 100 - (totalBasuraRecolectada + basuraRecolectada)
-    };
-
-    recolectionData.push(newData);
-    localStorage.setItem('recolectionData', JSON.stringify(recolectionData));
-    localStorage.setItem('chartType', document.getElementById('chartType').value);
-
-    loadAndDisplayData();
-});
-
-document.getElementById('clearButton').addEventListener('click', function() {
-    localStorage.removeItem('recolectionData');
-    localStorage.removeItem('chartType');
-    window.location.reload();
-});
-
+// Función que se ejecuta cuando la página se carga
 window.onload = function() {
-    loadAndDisplayData();
+    loadAndDisplayData(); // Carga y muestra los datos al iniciar
 };
 
-document.getElementById('chartType').addEventListener('change', () => {
-    localStorage.setItem('chartType', document.getElementById('chartType').value);
-    loadAndDisplayData();
-});
-
+// Función para cargar y mostrar los datos almacenados
 function loadAndDisplayData() {
-    const recolectionData = JSON.parse(localStorage.getItem('recolectionData')) || [];
-    const chartType = localStorage.getItem('chartType') || 'bar';
-    if (recolectionData.length > 0) {
-        document.getElementById('basuraRecolectada').value = '';
-        generateChart(chartType, recolectionData);
+    const chartType = localStorage.getItem('chartType') || 'line'; // Obtiene el tipo de gráfico almacenado o usa 'line' por defecto
+
+    if (limpiezaData.length > 0) {
+        generateChart(chartType, limpiezaData); // Genera el gráfico con los datos actuales
     }
 }
 
-function generateChart(chartType, recolectionData) {
-    const ctx = document.getElementById('chartCanvas').getContext('2d');
+// Función para generar y mostrar el gráfico
+function generateChart(chartType, limpiezaData) {
+    const ctx = document.getElementById('chartCanvas').getContext('2d'); // Obtiene el contexto del lienzo del gráfico
 
-    // Preparar los datos para la gráfica
-    const labels = recolectionData.map(data => `Día ${data.day}`);
-    const basuraRecolectadaData = recolectionData.map(data => data.basuraRecolectada);
-    const areaRecuperadaData = recolectionData.map(data => data.areaRecuperada);
-    const basuraNoRecolectadaData = recolectionData.map(data => data.basuraNoRecolectada);
-    const areaNoRecuperadaData = recolectionData.map(data => data.areaNoRecuperada);
+    // Prepara los datos para la gráfica
+    const labels = limpiezaData.map(data => data.day); // Etiquetas de los días
 
-    // Destruir el gráfico anterior si existe
+    // Crear datasets para cada persona
+    const datasets = [];
+
+    // Colores para cada persona
+    const colors = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'];
+
+    // Nombres de las personas (aseguramos que no se repiten)
+    const nombres = [...new Set(limpiezaData.flatMap(data => data.detalles.map(detalle => detalle.nombre)))];
+
+    if (chartType === 'line' || chartType === 'bar') {
+        nombres.forEach((nombre, index) => {
+            const color = colors[index % colors.length];
+            const porcentajeData = limpiezaData.map(data => {
+                const detalle = data.detalles.find(detalle => detalle.nombre === nombre);
+                return detalle ? detalle.porcentaje : 0;
+            });
+            const areaData = limpiezaData.map(data => {
+                const detalle = data.detalles.find(detalle => detalle.nombre === nombre);
+                return detalle ? detalle.area : 0;
+            });
+
+            datasets.push({
+                label: `${nombre} - Porcentaje (%)`,
+                data: porcentajeData,
+                backgroundColor: chartType === 'line' ? `${color}55` : color,
+                borderColor: color,
+                fill: chartType === 'line' ? false : true // Ajusta el relleno basado en el tipo de gráfico
+            });
+
+            datasets.push({
+                label: `${nombre} - Área (m2)`,
+                data: areaData,
+                backgroundColor: chartType === 'line' ? `${color}AA` : color,
+                borderColor: color,
+                fill: chartType === 'line' ? false : true // Ajusta el relleno basado en el tipo de gráfico
+            });
+        });
+    } else {
+        const totalPorcentajes = limpiezaData.map(data => data.total.porcentaje);
+        const totalAreas = limpiezaData.map(data => data.total.area);
+        
+        datasets.push({
+            label: 'Porcentaje Total (%)',
+            data: totalPorcentajes,
+            backgroundColor: colors,
+            borderColor: '#fff',
+            borderWidth: 1
+        });
+
+        datasets.push({
+            label: 'Área Total (m2)',
+            data: totalAreas,
+            backgroundColor: colors,
+            borderColor: '#fff',
+            borderWidth: 1
+        });
+    }
+
+    // Destruye el gráfico anterior si existe
     if (chart) {
         chart.destroy();
     }
 
-    // Crear un nuevo gráfico
+    // Crea un nuevo gráfico con los datos preparados
     chart = new Chart(ctx, {
-        type: chartType,
+        type: chartType, // Tipo de gráfico
         data: {
-            labels: labels,
-            datasets: [
-                {
-                    label: 'Basura Recolectada (%)',
-                    data: basuraRecolectadaData,
-                    backgroundColor: '#0f0'
-                },
-                {
-                    label: 'Área Recuperada (%)',
-                    data: areaRecuperadaData,
-                    backgroundColor: '#03e4f4'
-                },
-                {
-                    label: 'Basura No Recolectada (%)',
-                    data: basuraNoRecolectadaData,
-                    backgroundColor: '#f00'
-                },
-                {
-                    label: 'Área No Recuperada (%)',
-                    data: areaNoRecuperadaData,
-                    backgroundColor: '#f80'
-                }
-            ]
+            labels: labels, // Etiquetas
+            datasets: datasets // Conjuntos de datos
         },
         options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
+            responsive: true, // Ajuste de responsividad
+            maintainAspectRatio: false, // Mantener la relación de aspecto
+            scales: chartType !== 'polarArea' && chartType !== 'doughnut' && chartType !== 'pie' ? {
                 x: {
                     title: {
                         display: true,
-                        text: 'Días'
+                        text: 'Días' // Título del eje X
                     }
                 },
                 y: {
                     title: {
                         display: true,
-                        text: 'Porcentaje'
+                        text: 'Valores' // Título del eje Y
                     },
-                    beginAtZero: true,
-                    max: 100
+                    beginAtZero: true // Comenzar el eje Y desde cero
                 }
-            }
+            } : {} // No usar escalas para polarArea, doughnut y pie
         }
     });
 }
+
+// Añade un evento al tipo de gráfico para actualizar los datos cuando se cambia el tipo
+document.getElementById('chartType').addEventListener('change', () => {
+    localStorage.setItem('chartType', document.getElementById('chartType').value); // Guarda el nuevo tipo de gráfico
+    loadAndDisplayData(); // Carga y muestra los datos con el nuevo tipo de gráfico
+});
+
+// Añade un evento al botón para limpiar los datos almacenados
+document.getElementById('clearButton').addEventListener('click', function() {
+    localStorage.removeItem('chartType'); // Elimina el tipo de gráfico almacenado
+    window.location.reload(); // Recarga la página
+});
